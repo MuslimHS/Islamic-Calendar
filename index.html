@@ -127,7 +127,20 @@
         position: relative;
         overflow: hidden;
         border: 1px solid var(--secondary-color);
-        color: var(--text-dark);
+        color: var(--text-light);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+      }
+      .calendar-header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("header-silhouette.svg") no-repeat bottom/cover;
+        opacity: 0.2;
+        pointer-events: none;
       }
       .calendar-month-year {
         text-align: center;
