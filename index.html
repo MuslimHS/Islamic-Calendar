@@ -120,7 +120,7 @@
       .calendar-header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         padding: 15px 0;
         margin-bottom: 12px;
         border-radius: var(--radius);
@@ -153,21 +153,6 @@
       }
       .g-month-year {
         opacity: 0.7;
-      }
-
-      .calendar-nav {
-        border-radius: 50%;
-        background-color: var(--primary-color);
-        color: var(--text-light);
-        cursor: pointer;
-        margin: 0 10px;
-        font-size: 2rem;
-        transition: transform 0.2s ease;
-        padding: 1rem;
-        z-index: 2;
-      }
-      .calendar-nav:hover {
-        transform: scale(1.1);
       }
 
       .day,
@@ -279,8 +264,12 @@
         gap: 20px;
         margin: 20px 0 40px;
       }
-      .today-btn {
-        align-self: center;
+      .calendar-nav-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+      .nav-btn {
         background-color: var(--secondary-color);
         color: var(--text-light);
         border: none;
@@ -288,7 +277,7 @@
         border-radius: var(--radius);
         cursor: pointer;
       }
-      .today-btn:hover {
+      .nav-btn:hover {
         filter: brightness(0.9);
       }
       .special-date,
@@ -383,19 +372,9 @@
         <div class="calendar-wrapper page-width page-width--narrow">
           <div class="calendar">
             <div class="calendar-header">
-              <div id="prevMonth" class="calendar-nav">
-                <svg class="icon icon-chevron-thin-left">
-                  <use xlink:href="#icon-chevron-thin-left"></use>
-                </svg>
-              </div>
               <div class="calendar-month-year">
                 <div id="hMonthYear" class="h-month-year">&nbsp;</div>
                 <div id="gMonthYear" class="g-month-year">&nbsp;</div>
-              </div>
-              <div id="nextMonth" class="calendar-nav">
-                <svg class="icon icon-chevron-thin-right">
-                  <use xlink:href="#icon-chevron-thin-right"></use>
-                </svg>
               </div>
             </div>
 
@@ -458,7 +437,11 @@
               <div id="tooltip" class="hidden" role="tooltip"></div>
 
               <div class="calendar-footer">
-                <button id="todayBtn" class="today-btn">Today</button>
+                <div class="calendar-nav-buttons">
+                  <button id="prevMonth" class="nav-btn">Previous month</button>
+                  <button id="todayBtn" class="nav-btn">Today</button>
+                  <button id="nextMonth" class="nav-btn">Next month</button>
+                </div>
                 <div id="specialDates" class="special-dates-list"></div>
               </div>
             </div>
