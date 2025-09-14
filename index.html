@@ -652,30 +652,52 @@
         }
       }
 
+      // Prefetch additional months in the direction of navigation
+      function prefetchExtraMonths(direction) {
+        const offsets = direction === "next" ? [3, 4] : direction === "prev" ? [-3, -4] : [];
+        offsets.forEach((offset) => {
+          let month = currentHijri.month + offset;
+          let year = currentHijri.year;
+          while (month < 1) {
+            month += 12;
+            year--;
+          }
+          while (month > 12) {
+            month -= 12;
+            year++;
+          }
+          getHijriMonth(year, month);
+        });
+      }
+
       // Navigation event listeners
-      prevMonthBtn.addEventListener("click", () => {
+      prevMonthBtn.addEventListener("click", async () => {
         if (--currentHijri.month < 1) {
           currentHijri.month = 12;
           currentHijri.year--;
         }
-        renderCalendar();
+        await renderCalendar();
+        prefetchExtraMonths("prev");
       });
 
-      nextMonthBtn.addEventListener("click", () => {
+      nextMonthBtn.addEventListener("click", async () => {
         if (++currentHijri.month > 12) {
           currentHijri.month = 1;
           currentHijri.year++;
         }
-        renderCalendar();
+        await renderCalendar();
+        prefetchExtraMonths("next");
       });
 
-      todayBtn.addEventListener("click", () => {
+      todayBtn.addEventListener("click", async () => {
         if (!todayHijri) return;
         currentHijri = {
           year: todayHijri.year,
           month: todayHijri.month.number,
         };
-        renderCalendar();
+        await renderCalendar();
+        prefetchExtraMonths("next");
+        prefetchExtraMonths("prev");
       });
 
       // Generic fetch helper function
