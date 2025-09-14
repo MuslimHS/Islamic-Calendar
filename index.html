@@ -276,6 +276,9 @@
         padding: 0.8rem 1.2rem;
         border-radius: var(--radius);
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
       }
       .nav-btn:hover {
         filter: brightness(0.9);
@@ -438,9 +441,19 @@
 
               <div class="calendar-footer">
                 <div class="calendar-nav-buttons">
-                  <button id="prevMonth" class="nav-btn">Previous month</button>
+                  <button id="prevMonth" class="nav-btn">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icon-chevron-thin-left"></use>
+                    </svg>
+                    Previous month
+                  </button>
                   <button id="todayBtn" class="nav-btn">Today</button>
-                  <button id="nextMonth" class="nav-btn">Next month</button>
+                  <button id="nextMonth" class="nav-btn">
+                    Next month
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icon-chevron-thin-right"></use>
+                    </svg>
+                  </button>
                 </div>
                 <div id="specialDates" class="special-dates-list"></div>
               </div>
