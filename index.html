@@ -279,6 +279,18 @@
         gap: 20px;
         margin: 20px 0 40px;
       }
+      .today-btn {
+        align-self: center;
+        background-color: var(--secondary-color);
+        color: var(--text-light);
+        border: none;
+        padding: 0.8rem 1.2rem;
+        border-radius: var(--radius);
+        cursor: pointer;
+      }
+      .today-btn:hover {
+        filter: brightness(0.9);
+      }
       .special-date,
       .special-dates-list {
         flex-direction: column;
@@ -446,6 +458,7 @@
               <div id="tooltip" class="hidden" role="tooltip"></div>
 
               <div class="calendar-footer">
+                <button id="todayBtn" class="today-btn">Today</button>
                 <div id="specialDates" class="special-dates-list"></div>
               </div>
             </div>
@@ -461,6 +474,7 @@
       const calendarDays = document.querySelector("#calendarDays");
       const prevMonthBtn = document.querySelector("#prevMonth");
       const nextMonthBtn = document.querySelector("#nextMonth");
+      const todayBtn = document.querySelector("#todayBtn");
       const specialDates = document.querySelector("#specialDates");
       const tooltip = document.querySelector("#tooltip");
 
@@ -473,10 +487,20 @@
         specialDates.innerHTML = "";
 
         try {
-          const currMonth = await getHijriMonth(
-            currentHijri.year,
-            currentHijri.month
-          );
+          const prevYear =
+            currentHijri.month === 1 ? currentHijri.year - 1 : currentHijri.year;
+          const prevMonthNum =
+            currentHijri.month === 1 ? 12 : currentHijri.month - 1;
+          const nextYear =
+            currentHijri.month === 12 ? currentHijri.year + 1 : currentHijri.year;
+          const nextMonthNum =
+            currentHijri.month === 12 ? 1 : currentHijri.month + 1;
+
+          const [currMonth, prevMonth, nextMonth] = await Promise.all([
+            getHijriMonth(currentHijri.year, currentHijri.month),
+            getHijriMonth(prevYear, prevMonthNum),
+            getHijriMonth(nextYear, nextMonthNum),
+          ]);
           if (!currMonth.length) {
             console.error("No calendar data");
             return;
@@ -497,30 +521,6 @@
           const daysInCurrent = currMonth.length;
           const needsExtraRow = firstDayIndex + daysInCurrent > 35;
           const allCells = calendarDays.querySelectorAll(".day");
-
-          const needsPrev = firstDayIndex > 0;
-          const lastVisibleIndex = firstDayIndex + daysInCurrent - 1;
-          const needsNext = lastVisibleIndex < (needsExtraRow ? 41 : 34);
-
-          // Fetch previous and next months if needed
-          const [prevMonth, nextMonth] = await Promise.all([
-            needsPrev
-              ? getHijriMonth(
-                  currentHijri.month === 1
-                    ? currentHijri.year - 1
-                    : currentHijri.year,
-                  currentHijri.month === 1 ? 12 : currentHijri.month - 1
-                )
-              : null,
-            needsNext
-              ? getHijriMonth(
-                  currentHijri.month === 12
-                    ? currentHijri.year + 1
-                    : currentHijri.year,
-                  currentHijri.month === 12 ? 1 : currentHijri.month + 1
-                )
-              : null,
-          ]);
 
           // Fill calendar cells
           for (let i = 0; i < 42; i++) {
@@ -664,6 +664,15 @@
           currentHijri.month = 1;
           currentHijri.year++;
         }
+        renderCalendar();
+      });
+
+      todayBtn.addEventListener("click", () => {
+        if (!todayHijri) return;
+        currentHijri = {
+          year: todayHijri.year,
+          month: todayHijri.month.number,
+        };
         renderCalendar();
       });
 
